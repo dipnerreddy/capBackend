@@ -1,6 +1,7 @@
 package com.capstonebackend.controller;
 
 import com.capstonebackend.enity.BloodUnit;
+import com.capstonebackend.repository.BloodUnitRepository;
 import com.capstonebackend.service.BloodUnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -15,17 +17,24 @@ import java.util.List;
 public class BloodUnitController {
     @Autowired
     private BloodUnitService bloodUnitService;
+    @Autowired
+    private BloodUnitRepository bloodUnitRepository;
 
     @PostMapping("/add")
     public ResponseEntity<?> addBloodUnit(@RequestBody BloodUnit bloodUnit) {
-        try {
-            BloodUnit addedBloodUnit = bloodUnitService.addBloodUnit(bloodUnit);
-            return ResponseEntity.status(HttpStatus.CREATED).body(addedBloodUnit);
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid data provided");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding blood unit: " + e.getMessage());
-        }
+        // Ensure your BloodUnit class has the appropriate fields
+        String bloodType = bloodUnit.getBloodType();
+        String bid = bloodUnit.getBid();
+        String bbName = bloodUnit.getBbName();
+        int quantity = bloodUnit.getQuantity();
+        LocalDate expirationDate = bloodUnit.getExpirationDate();
+
+        // Your logic to add the blood unit to the database
+        // Ensure that you're correctly saving these fields
+        BloodUnit newBloodUnit = new BloodUnit(bloodType,quantity,expirationDate, bid, bbName);
+        bloodUnitRepository.save(newBloodUnit);
+
+        return ResponseEntity.ok("Blood Unit added successfully");
     }
 
 
