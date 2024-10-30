@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -29,6 +31,17 @@ public class BloodUnitService {
         return bloodUnitRepository.findAll();
     }
 
+    public Map<String, Integer> getBloodUnitsByBankName(String bbName) {
+        List<BloodUnit> bloodUnits = bloodUnitRepository.findByBbName(bbName);
+        Map<String, Integer> bloodUnitCounts = new HashMap<>();
 
-
+        // Accumulate quantities by blood type
+        for (BloodUnit unit : bloodUnits) {
+            bloodUnitCounts.put(
+                    unit.getBloodType(),
+                    bloodUnitCounts.getOrDefault(unit.getBloodType(), 0) + unit.getQuantity()
+            );
+        }
+        return bloodUnitCounts;
+    }
 }

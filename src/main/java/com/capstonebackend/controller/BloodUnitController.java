@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/bloodunits")
@@ -22,6 +23,12 @@ public class BloodUnitController {
     private BloodUnitRepository bloodUnitRepository;
     @Autowired
     private BloodBankDAO bloodBankDAO;
+
+
+    @GetMapping("/piechart/{bbName}")
+    public Map<String, Integer> getBloodUnitsByBloodBankName(@PathVariable String bbName) {
+        return bloodUnitService.getBloodUnitsByBankName(bbName);
+    }
 
     @PostMapping("/add")
     public ResponseEntity<?> addBloodUnit(@RequestBody BloodUnit bloodUnit) {
