@@ -1,5 +1,6 @@
 package com.capstonebackend.controller;
 
+import com.capstonebackend.dao.BloodBankDAO;
 import com.capstonebackend.enity.BloodUnit;
 import com.capstonebackend.repository.BloodUnitRepository;
 import com.capstonebackend.service.BloodUnitService;
@@ -19,6 +20,8 @@ public class BloodUnitController {
     private BloodUnitService bloodUnitService;
     @Autowired
     private BloodUnitRepository bloodUnitRepository;
+    @Autowired
+    private BloodBankDAO bloodBankDAO;
 
     @PostMapping("/add")
     public ResponseEntity<?> addBloodUnit(@RequestBody BloodUnit bloodUnit) {
@@ -29,12 +32,20 @@ public class BloodUnitController {
         int quantity = bloodUnit.getQuantity();
         LocalDate expirationDate = bloodUnit.getExpirationDate();
 
-        // Your logic to add the blood unit to the database
-        // Ensure that you're correctly saving these fields
-        BloodUnit newBloodUnit = new BloodUnit(bloodType,quantity,expirationDate, bid, bbName);
-        bloodUnitRepository.save(newBloodUnit);
 
-        return ResponseEntity.ok("Blood Unit added successfully");
+        boolean T=bloodBankDAO.existsByBidAndBbName(bid,bbName);
+        if(T==false){
+            BloodUnit newBloodUnit = new BloodUnit(bloodType,quantity,expirationDate, bid, bbName);
+            bloodUnitRepository.save(newBloodUnit);
+
+            return ResponseEntity.ok("Blood Unit added successfully");
+        }
+        else if(T==true){
+            return ResponseEntity.status(400).body("BID Present");
+        }
+        return ResponseEntity.status(404).body("Somthing Wrong");
+
+
     }
 
 
