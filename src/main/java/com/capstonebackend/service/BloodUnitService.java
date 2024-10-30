@@ -15,17 +15,6 @@ public class BloodUnitService {
     @Autowired
     private BloodUnitRepository bloodUnitRepository;
 
-    public BloodUnit addBloodUnit(BloodUnit bloodUnit) {
-        return bloodUnitRepository.save(bloodUnit);
-    }
-
-    public void deleteExpiredUnits() {
-        List<BloodUnit> expiredUnits = bloodUnitRepository.findAll()
-                .stream()
-                .filter(unit -> unit.getExpirationDate().isBefore(LocalDate.now()))
-                .toList();
-        bloodUnitRepository.deleteAll(expiredUnits);
-    }
     @Transactional
     public void deleteBloodUnit(Long id) {
         Optional<BloodUnit> bloodUnit = bloodUnitRepository.findById(id);
@@ -40,9 +29,6 @@ public class BloodUnitService {
         return bloodUnitRepository.findAll();
     }
 
-    public BloodUnit save(BloodUnit bloodUnit) {
-        // Perform any additional logic if needed
-        return bloodUnitRepository.save(bloodUnit);
-    }
+
 
 }

@@ -21,4 +21,21 @@ public class BloodBankDAOImpl implements BloodBankDAO {
             return false;
         }
     }
+
+    @Override
+    public boolean delete(String bid, String bbName) {
+        String sql = "DELETE FROM blood_units WHERE bid = ? AND bb_name = ?";
+        int rowsAffected = jdbcTemplate.update(sql, bid, bbName);
+        // If rowsAffected is greater than 0, deletion was successful
+        return rowsAffected > 0;
+    }
+    @Override
+    public boolean existsByBidAndBbNameAndBloodGroup(String bid, String bbName, String bloodType) {
+        String sql = "SELECT COUNT(*) FROM blood_units WHERE bid = ? AND bb_name = ? AND blood_type = ?";
+        System.out.println("Executing SQL: " + sql + " with parameters: " + bid + ", " + bbName + ", " + bloodType);
+        Integer count = jdbcTemplate.queryForObject(sql, new Object[]{bid, bbName, bloodType}, Integer.class);
+        return count != null && count > 0;
+    }
+
+
 }
