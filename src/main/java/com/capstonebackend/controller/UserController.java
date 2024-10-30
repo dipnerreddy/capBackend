@@ -49,5 +49,14 @@ public class UserController {
         userDTORepository.save(newDTO);
         return  ResponseEntity.ok("Payment processed successfully");
     }
+
+    @DeleteMapping("/delete-request")
+    public ResponseEntity<String> deleteUserRequst(@RequestBody UserDTO userDTO){
+        Long id=userDTO.getId();
+
+        userDTORepository.deleteById(id);
+
+        return ResponseEntity.ok("Deleted successfully");
+    }
 }
 
