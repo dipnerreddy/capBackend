@@ -28,6 +28,11 @@ public class BillController {
     @Autowired
     private BloodBankDAO bloodBankDAO;
 
+
+
+
+    // here there is another problem. check properly
+
     @PostMapping("/payment")
     public ResponseEntity<String> makePayment(@RequestBody Bill bill) {
         String patientName = bill.getPatientName();
@@ -71,3 +76,4 @@ public class BillController {
         }
     }
 }
+
