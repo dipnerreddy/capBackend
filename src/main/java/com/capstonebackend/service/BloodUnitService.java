@@ -39,4 +39,10 @@ public class BloodUnitService {
     public List<BloodUnit> getAllBloodUnits() {
         return bloodUnitRepository.findAll();
     }
+
+    public BloodUnit save(BloodUnit bloodUnit) {
+        // Perform any additional logic if needed
+        return bloodUnitRepository.save(bloodUnit);
+    }
+
 }

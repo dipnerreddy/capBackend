@@ -11,15 +11,34 @@ public class BloodUnit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
+
     private String bloodType;
-    @NotNull
-    private int quantity;
-    @NotNull
-    private LocalDate expirationDate;
-    @NotNull
     private String bid;
+    private String bbName;
+    private int quantity;
+    private LocalDate expirationDate;
+
     // Getters and Setters
+
+
+    public BloodUnit() {
+    }
+
+    public BloodUnit(String bloodType, int quantity, LocalDate expirationDate, String bid, String bbName) {
+        this.bloodType = bloodType;
+        this.quantity = quantity;
+        this.expirationDate = expirationDate;
+        this.bid = bid;
+        this.bbName = bbName;
+    }
+
+    public String getBbName() {
+        return bbName;
+    }
+
+    public void setBbName(String bbName) {
+        this.bbName = bbName;
+    }
 
     public String getBid() {
         return bid;
