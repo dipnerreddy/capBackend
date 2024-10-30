@@ -10,14 +10,36 @@ public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String patientName;
-    private String patientPhone;
-    private String bid; // Blood ID
-    private double amount;
-    private LocalDateTime createdAt;
+    private String patientNumber;
+    private String amount;
+    private String bid;
+    private String bloodType;
+    private String bbName;
 
     // Getters and Setters
 
+
+    public Bill() {
+    }
+
+    public Bill(String patientName, String patientNumber, String amount, String bid, String bloodType, String bbName) {
+        this.patientName = patientName;
+        this.patientNumber = patientNumber;
+        this.amount = amount;
+        this.bid = bid;
+        this.bloodType = bloodType;
+        this.bbName = bbName;
+    }
+
+    public String getBbName() {
+        return bbName;
+    }
+
+    public void setBbName(String bbName) {
+        this.bbName = bbName;
+    }
 
     public Long getId() {
         return id;
@@ -35,12 +57,20 @@ public class Bill {
         this.patientName = patientName;
     }
 
-    public String getPatientPhone() {
-        return patientPhone;
+    public String getPatientNumber() {
+        return patientNumber;
     }
 
-    public void setPatientPhone(String patientPhone) {
-        this.patientPhone = patientPhone;
+    public void setPatientNumber(String patientNumber) {
+        this.patientNumber = patientNumber;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
     public String getBid() {
@@ -51,19 +81,11 @@ public class Bill {
         this.bid = bid;
     }
 
-    public double getAmount() {
-        return amount;
+    public String getBloodType() {
+        return bloodType;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setBloodType(String bloodType) {
+        this.bloodType = bloodType;
     }
 }

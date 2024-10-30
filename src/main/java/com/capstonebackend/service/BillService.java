@@ -13,7 +13,7 @@ public class BillService {
     private BillRepository billRepository;
 
     public Bill generateBill(Bill bill) {
-        bill.setCreatedAt(LocalDateTime.now());
+//        bill.setCreatedAt(LocalDateTime.now());
         return billRepository.save(bill);
     }
 }
