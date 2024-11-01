@@ -15,7 +15,14 @@ public class User {
 
     private  String password;
 
+    public User() {
+    }
 
+    public User(String userName, String phoneNumber, String password) {
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+    }
 
     // Getters and setters
 
