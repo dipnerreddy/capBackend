@@ -41,13 +41,13 @@ public class BloodUnitController {
 
 
         boolean T=bloodBankDAO.existsByBidAndBbName(bid,bbName);
-        if(T==false){
+        if(!T){
             BloodUnit newBloodUnit = new BloodUnit(bloodType,quantity,expirationDate, bid, bbName);
             bloodUnitRepository.save(newBloodUnit);
 
             return ResponseEntity.ok("Blood Unit added successfully");
         }
-        else if(T==true){
+        else if(T){
             return ResponseEntity.status(400).body("BID Present");
         }
         return ResponseEntity.status(404).body("Somthing Wrong");
