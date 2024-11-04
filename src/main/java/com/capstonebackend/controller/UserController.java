@@ -71,7 +71,6 @@ public class UserController {
         return ResponseEntity.status(401).body("User does not Exists with this phone number");
 
     }
-
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestBody UserResetPassword user){
         String phoneNumber=user.getPhoneNumber();
