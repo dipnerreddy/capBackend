@@ -31,6 +31,7 @@ public class UserController {
     private UserDAO userDAO;
 
 
+
     @PostMapping("/registration")
     public ResponseEntity<String> newUserRegistration(@RequestBody UserRegisterDTO userRegisterDTO){
         String username=userRegisterDTO.getUserName();
