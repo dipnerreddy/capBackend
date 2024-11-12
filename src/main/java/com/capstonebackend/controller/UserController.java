@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -66,7 +68,7 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> userLogin(@RequestBody User user) {
+    public ResponseEntity<Map<String, Object>> userLogin(@RequestBody User user) {
         String phoneNumber = user.getPhoneNumber();
         String password = user.getPassword();
 
@@ -75,17 +77,22 @@ public class UserController {
 
         // If the user does not exist
         if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(401).body("User does not exist with this phone number");
+            return ResponseEntity.status(401).body(Map.of("message", "User does not exist with this phone number"));
         }
 
         // Check if the password matches
         User existingUser = optionalUser.get();
         if (existingUser.getPassword().equals(password)) {
-            return ResponseEntity.ok("Login Success");
+            // Create a response object to return the login success message along with the user details (e.g., userName)
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Login Success");
+            response.put("userName", existingUser.getUserName());  // Include the userName (or any other info)
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(401).body("Wrong password, please try again");
+            return ResponseEntity.status(401).body(Map.of("message", "Wrong password, please try again"));
         }
     }
+
 
 
     @PostMapping("/forgot-password")
@@ -129,13 +136,17 @@ public class UserController {
         return ResponseEntity.ok(requests);  // Return the list of requests
     }
     @PostMapping("/request-blood")
-    public  ResponseEntity<String> postUserRequst(@RequestBody UserDTO userDTO){
-        String userName=userDTO.getUserName();
-        String phoneNumber=userDTO.getPhoneNumber();
-        String rBloodType=userDTO.getRBloodType();
-        String bbName=userDTO.getBbName();
+    public ResponseEntity<Map<String, String>> postUserRequst(@RequestBody UserDTO userDTO) {
+        String userName = userDTO.getUserName();
+        String phoneNumber = userDTO.getPhoneNumber();
+        String rBloodType = userDTO.getRBloodType();
+        String bbName = userDTO.getBbName();
 
-        UserDTO newDTO= new UserDTO();
+        // Log incoming request details for debugging
+        System.out.println("Received blood request: " + userDTO);
+
+        // Save the request in the database
+        UserDTO newDTO = new UserDTO();
         newDTO.setUserName(userName);
         newDTO.setPhoneNumber(phoneNumber);
         newDTO.setRBloodType(rBloodType);
@@ -143,8 +154,17 @@ public class UserController {
 
         userDTORepository.save(newDTO);
 
-        return  ResponseEntity.ok("Payment processed successfully");
+        // Create a response message
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Blood request processed successfully");
+
+        // Log response before sending it to the client
+        System.out.println("Sending response: " + response);
+
+        // Return a JSON response with a success message
+        return ResponseEntity.ok(response);  // Ensure the response is in JSON format
     }
+
 
     @DeleteMapping("/delete-request")
     public ResponseEntity<String> deleteUserRequst(@RequestBody UserDTO userDTO){
