@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,62 +35,87 @@ public class UserController {
 
     @PostMapping("/registration")
     public ResponseEntity<String> newUserRegistration(@RequestBody UserRegisterDTO userRegisterDTO){
-        String username=userRegisterDTO.getUserName();
-        String phoneNumber=userRegisterDTO.getPhoneNumber();
-        String password=userRegisterDTO.getPassword();
-        String rePassword=userRegisterDTO.getRePassword();
+        String username = userRegisterDTO.getUserName();
+        String phoneNumber = userRegisterDTO.getPhoneNumber();
+        String password = userRegisterDTO.getPassword();
+        String rePassword = userRegisterDTO.getRePassword();
 
-        boolean val=userRepository.findByPhoneNumber(phoneNumber);
-        if(!val){
+        // Check if the user with the given phone number exists
+        Optional<User> existingUser = userRepository.findByPhoneNumber(phoneNumber);
+
+        // If the user does not exist, proceed with registration
+        if (!existingUser.isPresent()) {
             UserRegisterDTO newRegister = new UserRegisterDTO();
             newRegister.setUserName(username);
             newRegister.setPhoneNumber(phoneNumber);
             newRegister.setPassword(password);
             newRegister.setRePassword(rePassword);
 
-            User newUser=new User(username,phoneNumber,password);
+            // Save the new user in the database
+            User newUser = new User(username, phoneNumber, password);
             userRepository.save(newUser);
             userRegisterDTORepository.save(newRegister);
-            return  ResponseEntity.ok("User Registration done successfully");
+
+            return ResponseEntity.ok("User Registration done successfully");
         }
-        return ResponseEntity.status(401).body("User Exists with that mobile number, please login.");
+
+        // If the user already exists, return an error message
+        return ResponseEntity.status(401).body("User exists with that mobile number, please login.");
     }
+
+
 
     @PostMapping("/login")
-    public ResponseEntity<String> userLogin(@RequestBody User user){
-        String phoneNumber=user.getPhoneNumber();
-        String password=user.getPassword();
+    public ResponseEntity<String> userLogin(@RequestBody User user) {
+        String phoneNumber = user.getPhoneNumber();
+        String password = user.getPassword();
 
-        boolean flag = userRepository.findByPhoneNumber(phoneNumber);
+        // Find user by phone number
+        Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
 
-        if(!flag){
-            boolean pass =userRepository.findByPassword(password);
-            if(pass){
-                return ResponseEntity.ok("Login Success");
-            }
-            return ResponseEntity.status(401).body("Wrong Password, re try");
+        // If the user does not exist
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.status(401).body("User does not exist with this phone number");
         }
-        return ResponseEntity.status(401).body("User does not Exists with this phone number");
 
+        // Check if the password matches
+        User existingUser = optionalUser.get();
+        if (existingUser.getPassword().equals(password)) {
+            return ResponseEntity.ok("Login Success");
+        } else {
+            return ResponseEntity.status(401).body("Wrong password, please try again");
+        }
     }
+
+
     @PostMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@RequestBody UserResetPassword user){
-        String phoneNumber=user.getPhoneNumber();
-        String password=user.getPassword();
-        String otp=user.getOtp();
-        boolean flag = userRepository.findByPhoneNumber(phoneNumber);
-        if(flag){
-            if(otp.equals("0000")){
-                boolean T=userDAO.resetPassword(phoneNumber,password);
-                if(T){
-                    return ResponseEntity.ok("Updated");
-                }
-                return ResponseEntity.status(401).body("unable to update");
-            }
+    public ResponseEntity<String> forgotPassword(@RequestBody UserResetPassword user) {
+        String phoneNumber = user.getPhoneNumber();
+        String password = user.getPassword();
+        String otp = user.getOtp();
+
+        // Find user by phone number
+        Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
+
+        // If the user does not exist
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.status(401).body("User does not exist with this phone number");
+        }
+
+        // Check if the OTP is correct (for simplicity, assuming the OTP is hardcoded as "0000")
+        if (!otp.equals("0000")) {
             return ResponseEntity.status(401).body("Wrong OTP");
         }
-        return ResponseEntity.status(401).body("user does not exits.");
+
+        // Proceed to reset the password
+        boolean isUpdated = userDAO.resetPassword(phoneNumber, password);
+        if (isUpdated) {
+            return ResponseEntity.ok("Password updated successfully");
+        } else {
+            return ResponseEntity.status(401).body("Unable to update password");
+        }
     }
+
 
     // New POST mapping to fetch requests based on bbName
     @GetMapping("/requests/{bbName}")

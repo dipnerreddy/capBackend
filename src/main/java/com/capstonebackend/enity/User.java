@@ -4,19 +4,24 @@ package com.capstonebackend.enity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "bbUser")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id") // Updated to match the correct column name in the database
     private Long id;
 
+    @Column(name = "user_name")
     private String userName;
+
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    private  String password;
+    @Column(name = "password")
+    private String password;
 
-    public User() {
-    }
+    // Getters and setters
+
 
     public User(String userName, String phoneNumber, String password) {
         this.userName = userName;
@@ -24,14 +29,8 @@ public class User {
         this.password = password;
     }
 
-    // Getters and setters
+    public User() {
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Long getId() {
@@ -58,4 +57,11 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
