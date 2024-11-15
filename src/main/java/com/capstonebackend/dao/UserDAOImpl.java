@@ -12,7 +12,7 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public boolean resetPassword(String phoneNumber, String password) {
-        String sql = "UPDATE users SET password = ? WHERE phone_number = ?";
+        String sql = "UPDATE bb_user SET password = ? WHERE phone_number = ?";
         int rowsAffected = jdbcTemplate.update(sql, password, phoneNumber);
         return rowsAffected > 0;
     }
