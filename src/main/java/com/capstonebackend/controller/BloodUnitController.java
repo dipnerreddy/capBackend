@@ -4,6 +4,7 @@ import com.capstonebackend.dao.BloodBankDAO;
 import com.capstonebackend.enity.BloodUnit;
 import com.capstonebackend.repository.BloodUnitRepository;
 import com.capstonebackend.service.BloodUnitService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -26,11 +27,17 @@ public class BloodUnitController {
 
 
     @GetMapping("/piechart/{bbName}")
+    @Operation(
+            summary = "piechart representation of data",
+            description = "using this api, we are representing the data in the form of piechart.\n inputs: bbName ")
     public Map<String, Integer> getBloodUnitsByBloodBankName(@PathVariable String bbName) {
         return bloodUnitService.getBloodUnitsByBankName(bbName);
     }
 
     @PostMapping("/add")
+    @Operation(
+            summary = "adding a new bloodunit",
+            description = "adding the new stock of blood which got donated recently")
     public ResponseEntity<?> addBloodUnit(@RequestBody BloodUnit bloodUnit) {
         // Ensure your BloodUnit class has the appropriate fields
         String bloodType = bloodUnit.getBloodType();

@@ -10,6 +10,8 @@ import com.capstonebackend.enity.User;
 import com.capstonebackend.repository.UserDTORepository;
 import com.capstonebackend.repository.UserRegisterDTORepository;
 import com.capstonebackend.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/userController")
+@Tag(name = "User Management", description = "Operations related to users")
 public class UserController {
 
     @Autowired
@@ -36,6 +39,7 @@ public class UserController {
 
 
     @PostMapping("/registration")
+    @Operation(summary = "New User Registration", description = "Provide an username, phoneNumber, password and confirm password to register a new user")
     public ResponseEntity<String> newUserRegistration(@RequestBody UserRegisterDTO userRegisterDTO){
         String username = userRegisterDTO.getUserName();
         String phoneNumber = userRegisterDTO.getPhoneNumber();
@@ -68,6 +72,7 @@ public class UserController {
 
 
     @PostMapping("/login")
+    @Operation(summary = "Existing User Login", description = "Provide phoneNumber, password to Login into your user portal.")
     public ResponseEntity<Map<String, Object>> userLogin(@RequestBody User user) {
         String phoneNumber = user.getPhoneNumber();
         String password = user.getPassword();
@@ -96,6 +101,7 @@ public class UserController {
 
 
     @PostMapping("/forgot-password")
+    @Operation(summary = "User Forgot Password", description = "Provide phoneNumber,otp(default otp '0000'and new-password to reset password.")
     public ResponseEntity<String> forgotPassword(@RequestBody UserResetPassword user) {
         String phoneNumber = user.getPhoneNumber();
         String password = user.getPassword();
@@ -126,6 +132,9 @@ public class UserController {
 
     // New POST mapping to fetch requests based on bbName
     @GetMapping("/requests/{bbName}")
+    @Operation(
+            summary = "Request made by the user",
+            description = "It Gives the list of request that particular blood bank received")
     public ResponseEntity<List<UserDTO>> getRequestsByBloodBank(@PathVariable String bbName) {
         List<UserDTO> requests = userDTORepository.findByBbName(bbName);
 
@@ -136,6 +145,7 @@ public class UserController {
         return ResponseEntity.ok(requests);  // Return the list of requests
     }
     @PostMapping("/request-blood")
+    @Operation(summary = "User Blood Request to Blood Banks", description = "Provide an username, phoneNumber, rBloodType and bbName to request a blood unit from that blood bank")
     public ResponseEntity<Map<String, String>> postUserRequst(@RequestBody UserDTO userDTO) {
         String userName = userDTO.getUserName();
         String phoneNumber = userDTO.getPhoneNumber();
@@ -167,6 +177,7 @@ public class UserController {
 
 
     @DeleteMapping("/delete-request")
+    @Operation(summary = "Delete request, This is shown on the bloodBank portal", description = "")
     public ResponseEntity<String> deleteUserRequst(@RequestBody UserDTO userDTO){
         Long id=userDTO.getId();
 

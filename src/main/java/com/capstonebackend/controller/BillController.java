@@ -7,6 +7,7 @@ import com.capstonebackend.enity.BloodUnit;
 import com.capstonebackend.repository.BillRepository;
 import com.capstonebackend.service.BillService;
 import com.capstonebackend.service.BillingService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,8 @@ public class BillController {
     // here there is another problem. check properly
 
     @PostMapping("/payment")
+    @Operation(summary = "Payment request", description = "BloodBank portal can bill for a blood unit. \n inputs are patientName," +
+            "patientNumber, bid, amount, bloodType, bbName")
     public ResponseEntity<String> makePayment(@RequestBody Bill bill) {
         String patientName = bill.getPatientName();
         String patientNumber = bill.getPatientNumber();
@@ -62,18 +65,16 @@ public class BillController {
         }
     }
 
-
-
-
-    @PostMapping("/generateBill")
-    public ResponseEntity<?> generateBill(@RequestBody Bill bill) {
-        try {
-            // Logic to handle bill generation using BID
-            Bill generatedBill = billService.generateBill(bill);
-            return ResponseEntity.status(HttpStatus.CREATED).body(generatedBill);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error generating bill: " + e.getMessage());
-        }
-    }
+//    @PostMapping("/generateBill")
+//    @Operation(summary = "Delete request, This is shown on the bloodBank portal", description = "")
+//    public ResponseEntity<?> generateBill(@RequestBody Bill bill) {
+//        try {
+//            // Logic to handle bill generation using BID
+//            Bill generatedBill = billService.generateBill(bill);
+//            return ResponseEntity.status(HttpStatus.CREATED).body(generatedBill);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error generating bill: " + e.getMessage());
+//        }
+//    }
 }
 
