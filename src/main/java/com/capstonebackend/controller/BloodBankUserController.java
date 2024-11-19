@@ -3,6 +3,7 @@ package com.capstonebackend.controller;
 import com.capstonebackend.dto.LoginRequestDTO;
 import com.capstonebackend.enity.BloodBankUser;
 import com.capstonebackend.service.BloodBankUserService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,10 @@ public class BloodBankUserController {
     private BloodBankUserService bloodBankUserService;
 
     @PostMapping("/register")
+    @Operation(
+            summary = "blood bank Registration",
+            description = "inputs: " +
+                    "bbName, email, address, password")
     public ResponseEntity<String> registerUser(@RequestBody BloodBankUser user) {
         // Check if a user with the same email already exists
         BloodBankUser existingUser = bloodBankUserService.findByEmail(user.getEmail());
@@ -33,6 +38,9 @@ public class BloodBankUserController {
 
 
     @PostMapping("/login")
+    @Operation(
+            summary = "Blood Bank Login",
+            description = "inputs: Email and password")
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequestDTO loginRequest) {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
