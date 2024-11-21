@@ -25,8 +25,6 @@ public class BloodBankUser {
         this.address = address;
     }
 
-    // g&S
-
     public Long getId() {
         return id;
     }

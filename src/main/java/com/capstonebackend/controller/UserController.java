@@ -5,7 +5,6 @@ import com.capstonebackend.dao.UserDAO;
 import com.capstonebackend.dto.UserDTO;
 import com.capstonebackend.dto.UserRegisterDTO;
 import com.capstonebackend.dto.UserResetPassword;
-import com.capstonebackend.enity.Bill;
 import com.capstonebackend.enity.User;
 import com.capstonebackend.repository.UserDTORepository;
 import com.capstonebackend.repository.UserRegisterDTORepository;
@@ -15,12 +14,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/userController")
@@ -46,10 +43,8 @@ public class UserController {
         String password = userRegisterDTO.getPassword();
         String rePassword = userRegisterDTO.getRePassword();
 
-        // Check if the user with the given phone number exists
         Optional<User> existingUser = userRepository.findByPhoneNumber(phoneNumber);
 
-        // If the user does not exist, proceed with registration
         if (!existingUser.isPresent()) {
             UserRegisterDTO newRegister = new UserRegisterDTO();
             newRegister.setUserName(username);
@@ -57,7 +52,6 @@ public class UserController {
             newRegister.setPassword(password);
             newRegister.setRePassword(rePassword);
 
-            // Save the new user in the database
             User newUser = new User(username, phoneNumber, password);
             userRepository.save(newUser);
             userRegisterDTORepository.save(newRegister);
@@ -65,7 +59,6 @@ public class UserController {
             return ResponseEntity.ok("User Registration done successfully");
         }
 
-        // If the user already exists, return an error message
         return ResponseEntity.status(401).body("User exists with that mobile number, please login.");
     }
 
@@ -77,18 +70,14 @@ public class UserController {
         String phoneNumber = user.getPhoneNumber();
         String password = user.getPassword();
 
-        // Find user by phone number
         Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
 
-        // If the user does not exist
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(401).body(Map.of("message", "User does not exist with this phone number"));
         }
 
-        // Check if the password matches
         User existingUser = optionalUser.get();
         if (existingUser.getPassword().equals(password)) {
-            // Create a response object to return the login success message along with the user details (e.g., userName)
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Login Success");
             response.put("userName", existingUser.getUserName());  // Include the userName (or any other info)
@@ -107,20 +96,16 @@ public class UserController {
         String password = user.getPassword();
         String otp = user.getOtp();
 
-        // Find user by phone number
         Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
 
-        // If the user does not exist
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(401).body("User does not exist with this phone number");
         }
 
-        // Check if the OTP is correct (for simplicity, assuming the OTP is hardcoded as "0000")
         if (!otp.equals("0000")) {
             return ResponseEntity.status(401).body("Wrong OTP");
         }
 
-        // Proceed to reset the password
         boolean isUpdated = userDAO.resetPassword(phoneNumber, password);
         if (isUpdated) {
             return ResponseEntity.ok("Password updated successfully");
@@ -130,7 +115,6 @@ public class UserController {
     }
 
 
-    // New POST mapping to fetch requests based on bbName
     @GetMapping("/requests/{bbName}")
     @Operation(
             summary = "Request made by the user",
@@ -152,10 +136,8 @@ public class UserController {
         String rBloodType = userDTO.getRBloodType();
         String bbName = userDTO.getBbName();
 
-        // Log incoming request details for debugging
         System.out.println("Received blood request: " + userDTO);
 
-        // Save the request in the database
         UserDTO newDTO = new UserDTO();
         newDTO.setUserName(userName);
         newDTO.setPhoneNumber(phoneNumber);
@@ -164,14 +146,10 @@ public class UserController {
 
         userDTORepository.save(newDTO);
 
-        // Create a response message
         Map<String, String> response = new HashMap<>();
         response.put("message", "Blood request processed successfully");
-
-        // Log response before sending it to the client
         System.out.println("Sending response: " + response);
 
-        // Return a JSON response with a success message
         return ResponseEntity.ok(response);  // Ensure the response is in JSON format
     }
 

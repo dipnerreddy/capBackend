@@ -10,20 +10,12 @@ public class UserDTO {
 
     private String userName;
     private String phoneNumber;
-    private String rBloodType; // Blood type requested by the user
+    private String rBloodType;
 
     private  String bbName;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
-
-
-
-
-    // Getters and setters
-
 
     public UserDTO() {
     }

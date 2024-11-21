@@ -39,7 +39,6 @@ public class BloodUnitController {
             summary = "adding a new bloodunit",
             description = "adding the new stock of blood which got donated recently")
     public ResponseEntity<?> addBloodUnit(@RequestBody BloodUnit bloodUnit) {
-        // Ensure your BloodUnit class has the appropriate fields
         String bloodType = bloodUnit.getBloodType();
         String bid = bloodUnit.getBid();
         String bbName = bloodUnit.getBbName();

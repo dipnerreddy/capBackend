@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,15 +22,12 @@ public class BloodBankUserController {
             description = "inputs: " +
                     "bbName, email, address, password")
     public ResponseEntity<String> registerUser(@RequestBody BloodBankUser user) {
-        // Check if a user with the same email already exists
         BloodBankUser existingUser = bloodBankUserService.findByEmail(user.getEmail());
 
         if (existingUser != null) {
-            // User already exists, return a conflict response
             return ResponseEntity.status(409).body("User already exists with this email");
         }
 
-        // If user does not exist, create a new user
         BloodBankUser registeredUser = bloodBankUserService.registerUser(user);
         return ResponseEntity.ok("User registered successfully with ID: " + registeredUser.getId());
     }
@@ -49,7 +45,6 @@ public class BloodBankUserController {
         Map<String, String> response = new HashMap<>();
 
         if (user != null) {
-            // Assuming user has a method to get blood bank name
             String bbName = user.getBbName(); // Modify according to your model
             response.put("message", "Login successful");
             response.put("bbName", bbName); // Include the blood bank name in the response
