@@ -1,8 +1,6 @@
 package com.capstonebackend.enity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDate;
 
 @Entity
@@ -17,9 +15,6 @@ public class BloodUnit {
     private String bbName;
     private int quantity;
     private LocalDate expirationDate;
-
-    // Getters and Setters
-
 
     public BloodUnit() {
     }

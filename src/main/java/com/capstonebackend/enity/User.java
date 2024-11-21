@@ -20,9 +20,6 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    // Getters and setters
-
-
     public User(String userName, String phoneNumber, String password) {
         this.userName = userName;
         this.phoneNumber = phoneNumber;

@@ -16,8 +16,6 @@ public class UserRegisterDTO {
     private  String password;
     private  String rePassword;
 
-    // constroctor
-
 
     public UserRegisterDTO() {
     }
@@ -30,7 +28,6 @@ public class UserRegisterDTO {
     }
 
 
-    // getters and setters
 
     public Long getId() {
         return id;

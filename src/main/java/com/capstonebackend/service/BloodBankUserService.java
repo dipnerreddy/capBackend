@@ -12,15 +12,12 @@ public class BloodBankUserService {
     @Autowired
     private BloodBankUserRepository bloodBankUserRepository;
 
-
     public BloodBankUser registerUser(BloodBankUser user) {
         return bloodBankUserRepository.save(user);
     }
-
     public BloodBankUser findByEmail(String email) {
         return bloodBankUserRepository.findByEmail(email);
     }
-
     public BloodBankUser login(String email, String password) {
         BloodBankUser user = bloodBankUserRepository.findByEmail(email);
         if (user != null) {

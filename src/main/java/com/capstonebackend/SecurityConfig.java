@@ -1,12 +1,9 @@
 package com.capstonebackend;
 
-import com.azure.core.http.HttpMethod;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -19,7 +16,7 @@ public class SecurityConfig {
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests.anyRequest().permitAll()
                 )
-                .csrf(csrf -> csrf.disable());  // Disable CSRF for testing (not recommended for production)
+                .csrf(csrf -> csrf.disable());
         return http.build();
     }
 }

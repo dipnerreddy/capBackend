@@ -13,7 +13,6 @@ public class BloodBankInfo {
         this.address = address;
     }
 
-    // Getters and Setters
 
     public String getBbName() {
         return bbName;

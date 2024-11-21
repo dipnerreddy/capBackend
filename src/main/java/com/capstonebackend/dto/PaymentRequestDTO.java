@@ -7,7 +7,6 @@ public class PaymentRequestDTO {
     private String bid;
     private String bloodGroup;
 
-    // Getters and Setters
 
     public String getPatientName() {
         return patientName;

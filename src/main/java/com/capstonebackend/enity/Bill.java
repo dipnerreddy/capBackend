@@ -2,7 +2,6 @@ package com.capstonebackend.enity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bills")
@@ -17,9 +16,6 @@ public class Bill {
     private String bid;
     private String bloodType;
     private String bbName;
-
-    // Getters and Setters
-
 
     public Bill() {
     }
