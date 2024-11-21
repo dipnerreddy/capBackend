@@ -48,6 +48,8 @@ public class UserController {
         String password = userRegisterDTO.getPassword();
         String rePassword = userRegisterDTO.getRePassword();
         String bloodType= userRegisterDTO.getBloodType();
+        String address= userRegisterDTO.getAddress();
+        String smallCap=address.toLowerCase();
         Optional<User> existingUser = userRepository.findByPhoneNumber(phoneNumber);
         if (!existingUser.isPresent()) {
             UserRegisterDTO newRegister = new UserRegisterDTO();
@@ -56,7 +58,7 @@ public class UserController {
             newRegister.setPassword(password);
             newRegister.setRePassword(rePassword);
             newRegister.setBloodType(bloodType);
-            User newUser = new User(username, phoneNumber, password,bloodType);
+            User newUser = new User(username, phoneNumber, password,bloodType,smallCap);
             userRepository.save(newUser);
             userRegisterDTORepository.save(newRegister);
             return ResponseEntity.ok("User Registration done successfully");

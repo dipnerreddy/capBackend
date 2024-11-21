@@ -16,7 +16,15 @@ public class UserRegisterDTO {
     private  String password;
     private  String rePassword;
     private String bloodType;
+    private String address;
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public UserRegisterDTO() {
     }

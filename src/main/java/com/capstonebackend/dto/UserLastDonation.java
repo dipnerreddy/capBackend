@@ -2,6 +2,8 @@ package com.capstonebackend.dto;
 
 import jakarta.persistence.*;
 
+import java.util.Calendar;
+
 @Entity
 public class UserLastDonation {
     @Id
@@ -41,4 +43,6 @@ public class UserLastDonation {
     public void setDate(String date) {
         this.date = date;
     }
+
+
 }

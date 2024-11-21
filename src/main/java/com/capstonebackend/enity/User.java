@@ -23,14 +23,23 @@ public class User {
     @Column(name = "bloodType")
     private String bloodType;
 
-    public User(String userName, String phoneNumber, String password, String bloodType) {
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public User(String userName, String phoneNumber, String password, String bloodType, String address) {
         this.userName = userName;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.bloodType = bloodType;
+        this.address = address;
     }
 
-
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public String getBloodType() {
         return bloodType;
