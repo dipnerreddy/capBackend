@@ -15,19 +15,28 @@ public class UserRegisterDTO {
 
     private  String password;
     private  String rePassword;
+    private String bloodType;
 
 
     public UserRegisterDTO() {
     }
 
-    public UserRegisterDTO(String userName, String phoneNumber, String password, String rePassword) {
+    public UserRegisterDTO(Long id, String userName, String phoneNumber, String password, String rePassword, String bloodType) {
+        this.id = id;
         this.userName = userName;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.rePassword = rePassword;
+        this.bloodType = bloodType;
     }
 
+    public String getBloodType() {
+        return bloodType;
+    }
 
+    public void setBloodType(String bloodType) {
+        this.bloodType = bloodType;
+    }
 
     public Long getId() {
         return id;

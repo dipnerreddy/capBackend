@@ -3,15 +3,18 @@ package com.capstonebackend.controller;
 
 import com.capstonebackend.dao.UserDAO;
 import com.capstonebackend.dto.UserDTO;
+import com.capstonebackend.dto.UserLastDonation;
 import com.capstonebackend.dto.UserRegisterDTO;
 import com.capstonebackend.dto.UserResetPassword;
 import com.capstonebackend.enity.User;
 import com.capstonebackend.repository.UserDTORepository;
+import com.capstonebackend.repository.UserLastDonationRepo;
 import com.capstonebackend.repository.UserRegisterDTORepository;
 import com.capstonebackend.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
@@ -32,6 +35,8 @@ public class UserController {
     private UserRegisterDTORepository userRegisterDTORepository;
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private UserLastDonationRepo userLastDonationRepo;
 
 
 
@@ -42,23 +47,20 @@ public class UserController {
         String phoneNumber = userRegisterDTO.getPhoneNumber();
         String password = userRegisterDTO.getPassword();
         String rePassword = userRegisterDTO.getRePassword();
-
+        String bloodType= userRegisterDTO.getBloodType();
         Optional<User> existingUser = userRepository.findByPhoneNumber(phoneNumber);
-
         if (!existingUser.isPresent()) {
             UserRegisterDTO newRegister = new UserRegisterDTO();
             newRegister.setUserName(username);
             newRegister.setPhoneNumber(phoneNumber);
             newRegister.setPassword(password);
             newRegister.setRePassword(rePassword);
-
-            User newUser = new User(username, phoneNumber, password);
+            newRegister.setBloodType(bloodType);
+            User newUser = new User(username, phoneNumber, password,bloodType);
             userRepository.save(newUser);
             userRegisterDTORepository.save(newRegister);
-
             return ResponseEntity.ok("User Registration done successfully");
         }
-
         return ResponseEntity.status(401).body("User exists with that mobile number, please login.");
     }
 
@@ -163,5 +165,41 @@ public class UserController {
 
         return ResponseEntity.ok("Deleted successfully");
     }
+
+    @GetMapping("/lastDonated/{phoneNumber}")
+    public ResponseEntity<UserLastDonation> getLastDonated(@PathVariable String phoneNumber) {
+        UserLastDonation user = userLastDonationRepo.findByPhoneNumber(phoneNumber);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    // Update the last donation date
+    @PostMapping("/lastDonated")
+    public ResponseEntity<String> updateLastDonated(@RequestBody UserLastDonation user) {
+        String phoneNumber = user.getPhoneNumber();
+        String date = user.getDate();
+
+        Optional<User> existingUser1 = userRepository.findByPhoneNumber(phoneNumber);
+        UserLastDonation existingUser = userLastDonationRepo.findByPhoneNumber(phoneNumber);
+
+        if(existingUser1 != null && existingUser ==null){
+            UserLastDonation userLastDonation = new UserLastDonation(phoneNumber,date);
+            userLastDonationRepo.save(userLastDonation);
+            return ResponseEntity.ok("Donation date updated successfully.");
+        }
+        else if(existingUser1 != null && existingUser != null){
+            existingUser.setDate(date);
+            userLastDonationRepo.save(existingUser);
+            return ResponseEntity.ok("Donation date updated successfully.");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+
+    }
+
 }
 

@@ -20,10 +20,24 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    public User(String userName, String phoneNumber, String password) {
+    @Column(name = "bloodType")
+    private String bloodType;
+
+    public User(String userName, String phoneNumber, String password, String bloodType) {
         this.userName = userName;
         this.phoneNumber = phoneNumber;
         this.password = password;
+        this.bloodType = bloodType;
+    }
+
+
+
+    public String getBloodType() {
+        return bloodType;
+    }
+
+    public void setBloodType(String bloodType) {
+        this.bloodType = bloodType;
     }
 
     public User() {
